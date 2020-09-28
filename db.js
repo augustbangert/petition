@@ -54,5 +54,5 @@ module.exports.createUser = function (first, last, email, password) {
 };
 
 module.exports.findPassword = function (currentUserId) {
-    return db.query("SELECT ");
+    return db.query("SELECT signature WHERE id = $1", [currentUserId]);
 };
