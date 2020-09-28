@@ -54,5 +54,10 @@ module.exports.createUser = function (first, last, email, password) {
 };
 
 module.exports.findPassword = function (currentUserId) {
-    return db.query("SELECT signature WHERE id = $1", [currentUserId]);
+    return db.query("SELECT password FROM signatures WHERE id = $1", [
+        currentUserId,
+    ]);
 };
+
+// questions:
+// where in the code do you control which table of a given database you are accessing?
