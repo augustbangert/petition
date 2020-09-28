@@ -1,0 +1,88 @@
+* {
+    margin: 0px;
+}
+
+body {
+    background-color: gainsboro;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.wrapper {
+}
+
+.board {
+    display: inline-block;
+    border-left: 10px solid mediumblue;
+    border-right: 10px solid mediumblue;
+    border-bottom: 10px solid mediumblue;
+}
+
+.slot {
+    width: 100px;
+    height: 100px;
+    background-color: goldenrod;
+    z-index: 2;
+}
+
+.hole {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background-color: gainsboro;
+    position: relative;
+    left: 10px;
+    top: 10px;
+    z-index: 1;
+}
+
+.column {
+    float: left;
+}
+
+.player1 {
+    background-color: red;
+    transition-duration: 2s;
+}
+
+.player2 {
+    background-color: black;
+    transition-duration: 2s;
+}
+
+.info {
+    display: inline-block;
+    height: 150px;
+    width: 400px;
+}
+
+.player-info {
+    margin-top: 10px;
+    font-size: xx-large;
+    color: red;
+}
+
+#reset-button {
+    font-size: xx-large;
+    z-index: 4;
+    position: relative;
+}
+
+#overlay {
+    position: fixed;
+    /* set height to 100vh, and delete 0 */
+    width: 100%;
+    background-color: black;
+    opacity: 50%;
+    z-index: 3;
+    top: 0;
+}
+
+.overlay-on {
+    height: 100vh;
+    overflow: auto;
+}
+
+#game-win {
+    font-size: 100px;
+}

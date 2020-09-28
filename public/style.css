@@ -1,0 +1,28 @@
+/* * {
+    background-color: rgb(115, 149, 179);
+} */
+
+img {
+    max-width: 50vw;
+    background-color: lightblue;
+    display: block;
+    margin: 0 auto;
+}
+
+canvas {
+    background-color: lightblue;
+}
+
+body {
+    background-image: url("donut.jpg");
+    background-size: cover;
+}
+
+h1,
+h2,
+h3,
+form {
+    text-align: center;
+    color: whitesmoke;
+    font-family: sans-serif;
+}

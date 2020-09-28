@@ -1,0 +1,17 @@
+{{!-- <link rel="stylesheet" href="style.css" /> --}}
+<h1>Take a look at my Projects</h1>
+<h2>Hey there, {{cohort}}</h2>
+
+<div class="container">
+    {{#projectsJson}}
+    <div>
+        <a href="./projects{{directory}}">{{name}}</a>
+        <a href="./projects{{directory}}">
+            <br />
+            <img src="{{directory}}/screenshot.png">
+        </a>
+        <br />
+        <br />
+        {{/projectsJson}}
+    </div>
+</div>

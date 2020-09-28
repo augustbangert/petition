@@ -1,0 +1,14 @@
+[
+    {
+        "name": "connectfour",
+        "directory": "./connectfour"
+    },
+    {
+        "name": "increm_search",
+        "directory": "./increm_search"
+    },
+    {
+        "name": "carousel",
+        "directory": "/carousel"
+    }
+]

@@ -1,0 +1,13 @@
+div {
+    min-height: 50px;
+    min-width: 50px;
+}
+
+.highlight {
+    color: white;
+    background-color: blue;
+}
+
+.countries-container {
+    width: 170px;
+}
