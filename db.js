@@ -13,7 +13,7 @@ const db = spicedPg(
 module.exports.insertNamesAndSignature = (first, last, signature) => {
     console.log("insertNamesAndSignature ran!");
     return db.query(
-        `INSERT INTO signatures (first, last, signature) VALUES ($1, $2, $3) RETURNING id`,
+        `INSERT INTO users (first, last, signature) VALUES ($1, $2, $3) RETURNING id`,
         [first, last, signature]
     );
 };
@@ -39,7 +39,7 @@ exports.getCitiesByCityName = (name) => {
 
 module.exports.findSignature = (signatureId) => {
     return db.query(
-        `SELECT signature FROM signatures
+        `SELECT signature FROM users
         WHERE id = $1`,
         [signatureId]
     );
@@ -54,7 +54,7 @@ module.exports.createUser = function (first, last, email, password) {
 };
 
 module.exports.findPassword = function (currentUserId) {
-    return db.query("SELECT password FROM signatures WHERE id = $1", [
+    return db.query("SELECT password FROM users WHERE id = $1", [
         currentUserId,
     ]);
 };
