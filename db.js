@@ -3,7 +3,7 @@ const spicedPg = require("spiced-pg");
 // const db = spicedPg(`postgres:${dbUser}:${dbPass}@localhost:5432/petition`);
 const db = spicedPg(
     process.env.DATABASE_URL ||
-        `postgres:august:postgres@localhost:5432/petition`
+        `postgres:august:postgres@localhost:5432/personalpetition` // changed from petition to personalpetition
 );
 
 // add functions here
