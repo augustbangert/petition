@@ -134,10 +134,13 @@ app.post("/register", function (req, res) {
 });
 
 app.post("/login", function (req, res) {
-    let hashedUserPasswordFromDB; // trying 'let' for now
-
+    // let hashedUserPasswordFromDB; // trying 'let' for now
+    console.log("LOGIN SUBMIT RAN");
+    console.log("req.body.password", req.body.password); //works!
+    console.log("req.body.email", req.body.email); //works!
+    // findPassword(req.body.password).then().catch();
     //compare takes two argument, clear text and hash to compare against
-    compare(req.body.password, hashedUserPasswordFromDB);
+    // compare(req.body.password, hashedUserPasswordFromDB);
 });
 
 // petition page post
