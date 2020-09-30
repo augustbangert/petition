@@ -135,10 +135,32 @@ app.post("/register", function (req, res) {
 
 app.post("/login", function (req, res) {
     // let hashedUserPasswordFromDB; // trying 'let' for now
-    console.log("LOGIN SUBMIT RAN");
-    console.log("req.body.password", req.body.password); //works!
-    console.log("req.body.email", req.body.email); //works!
-    // findPassword(req.body.password).then().catch();
+    // console.log("LOGIN SUBMIT RAN");
+    // console.log("req.body.password", req.body.password); //works!
+    // console.log("req.body.email", req.body.email); //works!
+    findPassword(req.body.email)
+        .then((result) => {
+            if (result.rows.length == 0) {
+                res.json(false);
+            }
+            // console.log("result.rows[0]", result.rows[0].password);
+            return compare(req.body.password, result.rows[0].password)
+                .then((isMatch) => {
+                    if (isMatch) {
+                        console.log("passwords match");
+                        res.json(true);
+                    } else {
+                        res.json(false);
+                    }
+                })
+                .catch((err) => {
+                    console.log(err);
+                    res.json(false);
+                });
+        })
+        .catch((err) => {
+            console.log(err);
+        });
     //compare takes two argument, clear text and hash to compare against
     // compare(req.body.password, hashedUserPasswordFromDB);
 });
