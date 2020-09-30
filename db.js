@@ -53,10 +53,8 @@ module.exports.createUser = function (first, last, email, password) {
     );
 };
 
-module.exports.findPassword = function (currentUserId) {
-    return db.query("SELECT password FROM users WHERE id = $1", [
-        currentUserId,
-    ]);
+module.exports.findPassword = function (inputEmail) {
+    return db.query(`SELECT * FROM users WHERE email = $1`, [inputEmail]);
 };
 
 // questions:
