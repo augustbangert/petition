@@ -6,6 +6,14 @@ app.engine("handlebars", hb());
 app.set("view engine", "handlebars");
 const projects = require("./projects");
 const cookieSession = require("cookie-session");
+
+const {
+    requireLoggedOutUser,
+    requireNoSignature,
+    requireSignature,
+    requireLoggedInUser,
+} = require("./middleware.js");
+
 const {
     insertNamesAndSignature,
     findSignature,
@@ -147,10 +155,11 @@ app.post("/login", function (req, res) {
             return compare(req.body.password, result.rows[0].password)
                 .then((isMatch) => {
                     if (isMatch) {
-                        console.log("passwords match");
-                        res.json(true);
+                        req.session.id = result.rows[0].id;
+                        res.redirect("/petition");
                     } else {
-                        res.json(false);
+                        console.log("error creating this user");
+                        console.log(error);
                     }
                 })
                 .catch((err) => {
