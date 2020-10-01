@@ -32,7 +32,7 @@ app.use(
 app.use(
     cookieSession({
         secret: `I'm always angry.`,
-        maxAge: 1000 * 60 * 60 * 24 * 14, // any number can go here
+        maxAge: 1000 * 60 * 60 * 24 * 14, // common practice to set a time limit for your cookie (fb cookies mostly never expire, in a bank perhaps a 5 minute age to the cookie, you get logged out after 5 min of inactivity. reset to 0 after every interaction) any number can go here
     })
 );
 
@@ -41,7 +41,10 @@ app.use(express.static("./public")); // see if this works
 app.use(express.static(__dirname + "/projects"));
 app.use(express.static(__dirname + "/public"));
 
-// from encounter with Alistair 17.06
+// ############################################ //
+// ############### SLASH ROUTE ################ //
+// ############################################ //
+
 app.get("/", (req, res) => {
     // console.log("get to root");
     // console.log("req.session before value set", req.session);
@@ -51,9 +54,15 @@ app.get("/", (req, res) => {
     res.redirect("/register");
 });
 
+// ############################################ //
+
 app.get("/pages/carousel/index.html", (req, res) => {
     res.sendFile(`${__dirname}/pages/carousel/index.html`);
 });
+
+// ############################################ //
+// ############### ABOUT PAGE ################# //
+// ############################################ //
 
 app.get("/about", function (req, res) {
     res.render("about", {
@@ -61,12 +70,9 @@ app.get("/about", function (req, res) {
     });
 });
 
-// petition page get
-app.get("/petition", function (req, res) {
-    res.render("petition", {
-        name: "kitty",
-    });
-});
+// ############################################ //
+// ############## THANKS PAGE ################# //
+// ############################################ //
 
 // thanks page get
 // this may not be correct
@@ -95,14 +101,12 @@ app.get("/signers", function (req, res) {
     });
 });
 
+// ############################################ //
+// ############# REGISTRATION PAGE ############ //
+// ############################################ //
+
 app.get("/register", function (req, res) {
     res.render("register", {
-        name: "kitty",
-    });
-});
-
-app.get("/login", function (req, res) {
-    res.render("login", {
         name: "kitty",
     });
 });
@@ -141,6 +145,16 @@ app.post("/register", function (req, res) {
     }
 });
 
+// ################################################ //
+// ################# LOGIN PAGE ################### //
+// ################################################ //
+
+app.get("/login", function (req, res) {
+    res.render("login", {
+        name: "kitty",
+    });
+});
+
 app.post("/login", function (req, res) {
     // let hashedUserPasswordFromDB; // trying 'let' for now
     // console.log("LOGIN SUBMIT RAN");
@@ -172,6 +186,17 @@ app.post("/login", function (req, res) {
         });
     //compare takes two argument, clear text and hash to compare against
     // compare(req.body.password, hashedUserPasswordFromDB);
+});
+
+// ################################################ //
+// ############# PETITION SIGNING PAGE ############ //
+// ################################################ //
+
+// petition page get
+app.get("/petition", function (req, res) {
+    res.render("petition", {
+        name: "kitty",
+    });
 });
 
 // petition page post
