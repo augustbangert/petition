@@ -41,6 +41,9 @@ app.use(express.static("./public")); // see if this works
 app.use(express.static(__dirname + "/projects"));
 app.use(express.static(__dirname + "/public"));
 
+app.use(requireLoggedInUser);
+app.use(requireLoggedOutUser);
+
 // ############################################ //
 // ############### SLASH ROUTE ################ //
 // ############################################ //
@@ -74,10 +77,7 @@ app.get("/about", function (req, res) {
 // ############## THANKS PAGE ################# //
 // ############################################ //
 
-// thanks page get
-// this may not be correct
 app.get("/thanks", function (req, res) {
-    // console.log("/thanks req.session", req.session);
     findSignature(req.session.sigId)
         .then((result) => {
             console.log(
@@ -94,7 +94,6 @@ app.get("/thanks", function (req, res) {
         });
 });
 
-// signers page get
 app.get("/signers", function (req, res) {
     res.render("signers", {
         name: "kitty",
@@ -105,14 +104,15 @@ app.get("/signers", function (req, res) {
 // ############# REGISTRATION PAGE ############ //
 // ############################################ //
 
-app.get("/register", function (req, res) {
+app.get("/register", requireLoggedOutUser, function (req, res) {
     res.render("register", {
         name: "kitty",
     });
+    // try the following line instead:
+    // res.render("register");
 });
 
-app.post("/register", function (req, res) {
-    // console.log("req.body", req.body);
+app.post("/register", requireLoggedOutUser, function (req, res) {
     const { firstname, lastname, email, password } = req.body;
     if (firstname && lastname && email && password) {
         hash(req.body.password)
@@ -149,13 +149,13 @@ app.post("/register", function (req, res) {
 // ################# LOGIN PAGE ################### //
 // ################################################ //
 
-app.get("/login", function (req, res) {
+app.get("/login", requireLoggedOutUser, function (req, res) {
     res.render("login", {
         name: "kitty",
     });
 });
 
-app.post("/login", function (req, res) {
+app.post("/login", requireLoggedOutUser, function (req, res) {
     // let hashedUserPasswordFromDB; // trying 'let' for now
     // console.log("LOGIN SUBMIT RAN");
     // console.log("req.body.password", req.body.password); //works!
@@ -169,7 +169,7 @@ app.post("/login", function (req, res) {
             return compare(req.body.password, result.rows[0].password)
                 .then((isMatch) => {
                     if (isMatch) {
-                        req.session.id = result.rows[0].id;
+                        req.session.userId = result.rows[0].id;
                         res.redirect("/petition");
                     } else {
                         console.log("error creating this user");
@@ -192,15 +192,13 @@ app.post("/login", function (req, res) {
 // ############# PETITION SIGNING PAGE ############ //
 // ################################################ //
 
-// petition page get
-app.get("/petition", function (req, res) {
+app.get("/petition", requireLoggedInUser, function (req, res) {
     res.render("petition", {
         name: "kitty",
     });
 });
 
-// petition page post
-app.post("/petition", function (req, res) {
+app.post("/petition", requireLoggedInUser, function (req, res) {
     // console.log(".post was successful to /petition (aka petition home page!)");
     // console.log("req.body.firstname", req.body.firstname);
     if (req.body.firstname && req.body.lastname && req.body.signing) {
