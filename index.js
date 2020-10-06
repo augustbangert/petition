@@ -41,8 +41,9 @@ app.use(express.static("./public")); // see if this works
 app.use(express.static(__dirname + "/projects"));
 app.use(express.static(__dirname + "/public"));
 
-app.use(requireLoggedInUser);
-app.use(requireLoggedOutUser);
+// optional middleware
+// app.use(requireLoggedInUser);
+// app.use(requireLoggedOutUser);
 
 // ############################################ //
 // ############### SLASH ROUTE ################ //
@@ -169,8 +170,9 @@ app.post("/login", requireLoggedOutUser, function (req, res) {
             return compare(req.body.password, result.rows[0].password)
                 .then((isMatch) => {
                     if (isMatch) {
-                        req.session.userId = result.rows[0].id;
+                        req.session.id = result.rows[0].id;
                         res.redirect("/petition");
+                        // res.json(true);
                     } else {
                         console.log("error creating this user");
                         console.log(error);
@@ -178,7 +180,7 @@ app.post("/login", requireLoggedOutUser, function (req, res) {
                 })
                 .catch((err) => {
                     console.log(err);
-                    res.json(false);
+                    // res.json(false);
                 });
         })
         .catch((err) => {
@@ -192,7 +194,7 @@ app.post("/login", requireLoggedOutUser, function (req, res) {
 // ############# PETITION SIGNING PAGE ############ //
 // ################################################ //
 
-app.get("/petition", requireLoggedInUser, function (req, res) {
+app.get("/petition", function (req, res) {
     res.render("petition", {
         name: "kitty",
     });
