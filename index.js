@@ -14,13 +14,15 @@ const {
     requireLoggedInUser,
 } = require("./middleware.js");
 
-const {
-    insertNamesAndSignature,
-    findSignature,
-    getSignatures,
-    createUser,
-    findPassword,
-} = require("./db.js");
+// const {
+//     insertNamesAndSignature,
+//     findSignature,
+//     getSignatures,
+//     createUser,
+//     findPassword,
+// } = require("./db.js");
+const db = require("./db.js");
+
 const { hash, compare } = require("./bc.js");
 
 app.use(
@@ -73,10 +75,10 @@ app.get("/about", function (req, res) {
 // ############################################ //
 
 app.get("/thanks", function (req, res) {
-    findSignature(req.session.sigId)
+    db.findSignature(req.session.sigId)
         .then((result) => {
             console.log(
-                "GET /thanks findSignature successful result.rows",
+                "GET /thanks db.findSignature successful result.rows",
                 result.rows[0].signature
                 // add rendering here
             );
@@ -85,7 +87,7 @@ app.get("/thanks", function (req, res) {
             });
         })
         .catch((error) => {
-            console.log("GET /thanks findSignature unsuccessful", error);
+            console.log("GET /thanks db.findSignature unsuccessful", error);
         });
 });
 
@@ -107,7 +109,7 @@ app.post("/register", requireLoggedOutUser, function (req, res) {
         hash(req.body.password)
             .then((hashed) => {
                 // const { first, last, email } = req.body;
-                createUser(
+                db.createUser(
                     req.body.firstname,
                     req.body.lastname,
                     req.body.email,
@@ -145,7 +147,7 @@ app.get("/login", requireLoggedOutUser, (req, res) => {
 app.post("/login", requireLoggedOutUser, (req, res) => {
     const { email, password } = req.body;
     let id;
-    findPassword(email)
+    db.findPassword(email)
         .then((result) => {
             // if (result.rows.length == 0) {
             //     res.json(false);
@@ -183,7 +185,7 @@ app.post("/petition", requireLoggedInUser, function (req, res) {
     if (req.body.firstname && req.body.lastname && req.body.signing) {
         // console.log("req.body test", req.body);
         const { firstname, lastname, signing } = req.body;
-        insertNamesAndSignature(firstname, lastname, signing)
+        db.insertNamesAndSignature(firstname, lastname, signing)
             .then((result) => {
                 // console.log("resultssss", result);
                 // console.log("result.rows", result.rows);
