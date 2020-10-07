@@ -14,13 +14,6 @@ const {
     requireLoggedInUser,
 } = require("./middleware.js");
 
-// const {
-//     insertNamesAndSignature,
-//     findSignature,
-//     getSignatures,
-//     createUser,
-//     findPassword,
-// } = require("./db.js");
 const db = require("./db.js");
 
 const { hash, compare } = require("./bc.js");
