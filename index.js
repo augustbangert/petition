@@ -50,12 +50,8 @@ app.use(express.static(__dirname + "/public"));
 // ############################################ //
 
 app.get("/", (req, res) => {
-    // console.log("get to root");
-    // console.log("req.session before value set", req.session);
     req.session.dill = "bigSecret99";
-    // console.log("req.session after value set", req.session);
-    // res.send(`<h1>Welcome to the homepage</h1>`);
-    res.redirect("/register");
+    res.redirect("/login");
 });
 
 // ############################################ //
@@ -69,9 +65,7 @@ app.get("/pages/carousel/index.html", (req, res) => {
 // ############################################ //
 
 app.get("/about", function (req, res) {
-    res.render("about", {
-        name: "kitty",
-    });
+    res.render("about", {});
 });
 
 // ############################################ //
@@ -96,9 +90,7 @@ app.get("/thanks", function (req, res) {
 });
 
 app.get("/signers", function (req, res) {
-    res.render("signers", {
-        name: "kitty",
-    });
+    res.render("signers", {});
 });
 
 // ############################################ //
@@ -106,11 +98,7 @@ app.get("/signers", function (req, res) {
 // ############################################ //
 
 app.get("/register", requireLoggedOutUser, function (req, res) {
-    res.render("register", {
-        name: "kitty",
-    });
-    // try the following line instead:
-    // res.render("register");
+    res.render("register", {});
 });
 
 app.post("/register", requireLoggedOutUser, function (req, res) {
@@ -150,44 +138,35 @@ app.post("/register", requireLoggedOutUser, function (req, res) {
 // ################# LOGIN PAGE ################### //
 // ################################################ //
 
-app.get("/login", requireLoggedOutUser, function (req, res) {
-    res.render("login", {
-        name: "kitty",
-    });
+app.get("/login", requireLoggedOutUser, (req, res) => {
+    res.render("login", {});
 });
 
-app.post("/login", requireLoggedOutUser, function (req, res) {
-    // let hashedUserPasswordFromDB; // trying 'let' for now
-    // console.log("LOGIN SUBMIT RAN");
-    // console.log("req.body.password", req.body.password); //works!
-    // console.log("req.body.email", req.body.email); //works!
-    findPassword(req.body.email)
+app.post("/login", requireLoggedOutUser, (req, res) => {
+    const { email, password } = req.body;
+    let id;
+    findPassword(email)
         .then((result) => {
-            if (result.rows.length == 0) {
-                res.json(false);
+            // if (result.rows.length == 0) {
+            //     res.json(false);
+            // }
+            const hashedPassword = result.rows[0].password;
+            id = result.rows[0].id; // possibly rename id
+            return compare(password, result.rows[0].password);
+        })
+        .then((isMatch) => {
+            if (isMatch) {
+                req.session.id = id;
+                res.redirect("/petition");
+            } else {
+                const error = "incorrect credentials, please re-enter";
+                res.render("login", { error });
             }
-            // console.log("result.rows[0]", result.rows[0].password);
-            return compare(req.body.password, result.rows[0].password)
-                .then((isMatch) => {
-                    if (isMatch) {
-                        req.session.id = result.rows[0].id;
-                        res.redirect("/petition");
-                        // res.json(true);
-                    } else {
-                        console.log("error creating this user");
-                        console.log(error);
-                    }
-                })
-                .catch((err) => {
-                    console.log(err);
-                    // res.json(false);
-                });
         })
         .catch((err) => {
-            console.log(err);
+            const error = "incorrect credentials, please re-enter";
+            res.render("login", { error });
         });
-    //compare takes two argument, clear text and hash to compare against
-    // compare(req.body.password, hashedUserPasswordFromDB);
 });
 
 // ################################################ //
@@ -195,9 +174,7 @@ app.post("/login", requireLoggedOutUser, function (req, res) {
 // ################################################ //
 
 app.get("/petition", function (req, res) {
-    res.render("petition", {
-        name: "kitty",
-    });
+    res.render("petition", {});
 });
 
 app.post("/petition", requireLoggedInUser, function (req, res) {
@@ -221,8 +198,6 @@ app.post("/petition", requireLoggedInUser, function (req, res) {
     } else {
         // this works!!
         res.render("petition", {
-            name: "kitty",
-            emojis: ["🐔", "🐔"],
             errors: ["error: please resubmit"],
         });
     }
