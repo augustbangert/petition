@@ -46,7 +46,7 @@ app.use(express.static(__dirname + "/public"));
 
 app.get("/", (req, res) => {
     req.session.dill = "bigSecret99";
-    res.redirect("/login");
+    res.redirect("/register");
 });
 
 // ############################################ //
