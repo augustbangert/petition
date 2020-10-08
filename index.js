@@ -168,11 +168,11 @@ app.post("/login", requireLoggedOutUser, (req, res) => {
 // ############# PETITION SIGNING PAGE ############ //
 // ################################################ //
 
-app.get("/petition", function (req, res) {
+app.get("/petition", requireLoggedInUser, (req, res) => {
     res.render("petition", {});
 });
 
-app.post("/petition", requireLoggedInUser, function (req, res) {
+app.post("/petition", requireLoggedInUser, (req, res) => {
     // console.log(".post was successful to /petition (aka petition home page!)");
     // console.log("req.body.firstname", req.body.firstname);
     if (req.body.firstname && req.body.lastname && req.body.signing) {
