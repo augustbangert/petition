@@ -130,6 +130,15 @@ app.post("/register", requireLoggedOutUser, function (req, res) {
 });
 
 // ################################################ //
+// ################# LOGOUT ####################### //
+// ################################################ //
+
+app.get("/logout", (req, res) => {
+    req.session = null;
+    res.redirect("/", {});
+});
+
+// ################################################ //
 // ################# LOGIN PAGE ################### //
 // ################################################ //
 
@@ -139,19 +148,19 @@ app.get("/login", requireLoggedOutUser, (req, res) => {
 
 app.post("/login", requireLoggedOutUser, (req, res) => {
     const { email, password } = req.body;
-    let id;
+    let userId;
     db.findPassword(email)
         .then((result) => {
             // if (result.rows.length == 0) {
             //     res.json(false);
             // }
             const hashedPassword = result.rows[0].password;
-            id = result.rows[0].id; // possibly rename id
+            userId = result.rows[0].id; // possibly rename id
             return compare(password, result.rows[0].password);
         })
         .then((isMatch) => {
             if (isMatch) {
-                req.session.id = id;
+                req.session.userId = userId;
                 res.redirect("/petition");
             } else {
                 const error = "incorrect credentials, please re-enter";
