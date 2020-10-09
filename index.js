@@ -59,7 +59,7 @@ app.get("/pages/carousel/index.html", (req, res) => {
 // ############### ABOUT PAGE ################# //
 // ############################################ //
 
-app.get("/about", function (req, res) {
+app.get("/about", (req, res) => {
     res.render("about", {});
 });
 
@@ -67,7 +67,7 @@ app.get("/about", function (req, res) {
 // ############## THANKS PAGE ################# //
 // ############################################ //
 
-app.get("/thanks", function (req, res) {
+app.get("/thanks", (req, res) => {
     db.findSignature(req.session.sigId)
         .then((result) => {
             console.log(
@@ -84,7 +84,11 @@ app.get("/thanks", function (req, res) {
         });
 });
 
-app.get("/signers", function (req, res) {
+// ############################################ //
+// ############## SIGNERS PAGE ################ //
+// ############################################ //
+
+app.get("/signers", (req, res) => {
     res.render("signers", {});
 });
 
@@ -92,11 +96,11 @@ app.get("/signers", function (req, res) {
 // ############# REGISTRATION PAGE ############ //
 // ############################################ //
 
-app.get("/register", requireLoggedOutUser, function (req, res) {
+app.get("/register", requireLoggedOutUser, (req, res) => {
     res.render("register", {});
 });
 
-app.post("/register", requireLoggedOutUser, function (req, res) {
+app.post("/register", requireLoggedOutUser, (req, res) => {
     const { firstname, lastname, email, password } = req.body;
     if (firstname && lastname && email && password) {
         hash(req.body.password)
@@ -130,7 +134,7 @@ app.post("/register", requireLoggedOutUser, function (req, res) {
 });
 
 // ################################################ //
-// ################# LOGOUT ####################### //
+// ################# LOGOUT ROUT ################## //
 // ################################################ //
 
 app.get("/logout", (req, res) => {
@@ -182,12 +186,9 @@ app.get("/petition", requireLoggedInUser, (req, res) => {
 });
 
 app.post("/petition", requireLoggedInUser, (req, res) => {
-    // console.log(".post was successful to /petition (aka petition home page!)");
-    // console.log("req.body.firstname", req.body.firstname);
-    if (req.body.firstname && req.body.lastname && req.body.signing) {
+    if (req.body.signature) {
         // console.log("req.body test", req.body);
-        const { firstname, lastname, signing } = req.body;
-        db.insertNamesAndSignature(firstname, lastname, signing)
+        db.insertSignature(res.session.userId, req.body.signature)
             .then((result) => {
                 // console.log("resultssss", result);
                 // console.log("result.rows", result.rows);
@@ -197,10 +198,7 @@ app.post("/petition", requireLoggedInUser, (req, res) => {
             .catch((error) => {
                 console.log("errorsssss", error);
             });
-        // this also works!! here you should make sure you have all fields full and then record the data to sql table
-        // res.cookie("theUserSigned", true); // commented out bc of cookiesession replacement
     } else {
-        // this works!!
         res.render("petition", {
             errors: ["error: please resubmit"],
         });

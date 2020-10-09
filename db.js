@@ -1,20 +1,22 @@
 const spicedPg = require("spiced-pg");
-// const { dbUser, dbPass } = require("./secrets.json");
-// const db = spicedPg(`postgres:${dbUser}:${dbPass}@localhost:5432/petition`);
 const db = spicedPg(
     process.env.DATABASE_URL ||
-        `postgres:august:postgres@localhost:5432/personalpetition` // changed from petition to personalpetition
+        `postgres:august:postgres@localhost:5432/personalpetition`
 );
 
-// add functions here
+// module.exports.insertNamesAndSignature = (first, last, signature) => {
+//     console.log("insertNamesAndSignature ran!");
+//     return db.query(
+//         `INSERT INTO signatures (first, last, signature) VALUES ($1, $2, $3) RETURNING id`,
+//         [first, last, signature]
+//     );
+// };
 
-// copied from lecture notes:
-
-module.exports.insertNamesAndSignature = (first, last, signature) => {
-    console.log("insertNamesAndSignature ran!");
+module.exports.insertSignature = (id, signature) => {
+    console.log("insertSignature ran!");
     return db.query(
-        `INSERT INTO signatures (first, last, signature) VALUES ($1, $2, $3) RETURNING id`,
-        [first, last, signature]
+        `INSERT INTO users (signature) WHERE id = $1 RETURNING id`,
+        [id, signature]
     );
 };
 
@@ -37,15 +39,23 @@ exports.getCitiesByCityName = (name) => {
     );
 };
 
+// module.exports.findSignature = (signatureId) => {
+//     return db.query(
+//         `SELECT signature FROM signatures
+//         WHERE id = $1`,
+//         [signatureId]
+//     );
+// };
+
 module.exports.findSignature = (signatureId) => {
     return db.query(
-        `SELECT signature FROM signatures
+        `SELECT signature FROM users
         WHERE id = $1`,
         [signatureId]
     );
 };
 
-module.exports.createUser = function (first, last, email, password) {
+module.exports.createUser = (first, last, email, password) => {
     return db.query(
         `INSERT INTO users (first, last, email, password)
         VALUES ($1, $2, $3, $4) RETURNING id`,
@@ -53,7 +63,7 @@ module.exports.createUser = function (first, last, email, password) {
     );
 };
 
-module.exports.findPassword = function (inputEmail) {
+module.exports.findPassword = (inputEmail) => {
     return db.query(`SELECT * FROM users WHERE email = $1`, [inputEmail]);
 };
 

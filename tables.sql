@@ -7,6 +7,7 @@ CREATE TABLE users(
   last VARCHAR NOT NULL CHECK (last != ''),
   email VARCHAR(255) NOT NULL UNIQUE,
   password VARCHAR(255) NOT NULL,
+  signature VARCHAR NOT NULL CHECK (signature != ''),
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
