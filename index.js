@@ -135,7 +135,7 @@ app.post("/register", requireLoggedOutUser, function (req, res) {
 
 app.get("/logout", (req, res) => {
     req.session = null;
-    res.redirect("/", {});
+    res.redirect("/");
 });
 
 // ################################################ //
