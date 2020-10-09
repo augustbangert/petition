@@ -113,7 +113,7 @@ app.post("/register", requireLoggedOutUser, (req, res) => {
                     hashed
                 )
                     .then((result) => {
-                        req.session.id = result.rows[0].id;
+                        req.session.userId = result.rows[0].id;
                         res.redirect("/petition");
                     })
                     .catch((error) => {
@@ -186,6 +186,7 @@ app.get("/petition", requireLoggedInUser, (req, res) => {
 });
 
 app.post("/petition", requireLoggedInUser, (req, res) => {
+    console.log("req.body: ", req.body);
     if (req.body.signature) {
         // console.log("req.body test", req.body);
         db.insertSignature(res.session.userId, req.body.signature)
