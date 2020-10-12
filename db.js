@@ -12,12 +12,13 @@ const db = spicedPg(
 //     );
 // };
 
-module.exports.insertSignature = (id, signature) => {
+module.exports.insertSignature = (userId, signature) => {
     console.log("insertSignature ran!");
-    return db.query(
-        `INSERT INTO users (signature) WHERE id = $1 RETURNING id`,
-        [id, signature]
-    );
+    console.log("userId", userId);
+    return db.query(`UPDATE users SET signature = $2 WHERE id = $1;`, [
+        userId,
+        signature,
+    ]);
 };
 
 // module.exports.getSignatures = () => {

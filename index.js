@@ -6,6 +6,7 @@ app.engine("handlebars", hb());
 app.set("view engine", "handlebars");
 const projects = require("./projects");
 const cookieSession = require("cookie-session");
+const csurf = require("csurf");
 
 const {
     requireLoggedOutUser,
@@ -186,15 +187,18 @@ app.get("/petition", requireLoggedInUser, (req, res) => {
 });
 
 app.post("/petition", requireLoggedInUser, (req, res) => {
+    console.log("req.body.signing: ", req.body.signing);
     console.log("req.body: ", req.body);
-    if (req.body.signature) {
+    console.log("req.session.userId: ", req.session.userId);
+    if (req.body.signing) {
         // console.log("req.body test", req.body);
-        db.insertSignature(res.session.userId, req.body.signature)
+        db.insertSignature(req.session.userId, req.body.signing)
             .then((result) => {
                 // console.log("resultssss", result);
                 // console.log("result.rows", result.rows);
-                req.session.sigId = result.rows[0].id;
-                res.redirect("/thanks");
+                // the following line is for setting a signature id
+                // req.session.sigId = result.rows[0].id;
+                // res.redirect("/thanks");
             })
             .catch((error) => {
                 console.log("errorsssss", error);
