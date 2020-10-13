@@ -4,14 +4,12 @@ const app = express();
 const hb = require("express-handlebars");
 app.engine("handlebars", hb());
 app.set("view engine", "handlebars");
-const projects = require("./projects");
+// const projects = require("./projects");
 const cookieSession = require("cookie-session");
 const csurf = require("csurf");
 
 const {
     requireLoggedOutUser,
-    requireNoSignature,
-    requireSignature,
     requireLoggedInUser,
 } = require("./middleware.js");
 
@@ -62,6 +60,14 @@ app.get("/pages/carousel/index.html", (req, res) => {
 
 app.get("/about", (req, res) => {
     res.render("about", {});
+});
+
+// ############################################ //
+// ############# SIGNERS PAGE ################# //
+// ############################################ //
+
+app.get("/signers", (req, res) => {
+    res.render("signers", {});
 });
 
 // ############################################ //
@@ -122,7 +128,7 @@ app.post("/register", requireLoggedOutUser, (req, res) => {
                         console.log(error);
                     });
             })
-            .catch((error) => {
+            .catch(() => {
                 res.render("petition", {
                     error: "An error occured connecting to the database!",
                 });
@@ -161,7 +167,7 @@ app.post("/login", requireLoggedOutUser, (req, res) => {
             // }
             const hashedPassword = result.rows[0].password;
             userId = result.rows[0].id; // possibly rename id
-            return compare(password, result.rows[0].password);
+            return compare(password, hashedPassword);
         })
         .then((isMatch) => {
             if (isMatch) {
