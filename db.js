@@ -1,7 +1,7 @@
 const spicedPg = require("spiced-pg");
 const db = spicedPg(
     process.env.DATABASE_URL ||
-        `postgres:august:postgres@localhost:5432/personalpetition`
+    `postgres:august:postgres@localhost:5432/personalpetition`
 );
 
 // module.exports.insertNamesAndSignature = (first, last, signature) => {

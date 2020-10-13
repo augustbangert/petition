@@ -1,13 +1,36 @@
-<h1>Existing signers</h1>
-<h3>🍩 🍩 🍩 🍩 🍩</h3>
-<br />
-<h2>List below:</h2>
-<br />
+<main>
+    <h1>Existing signers</h1>
+    <h3>🍩 🍩 🍩 🍩 🍩</h3>
+    <br />
+    <h2>List below:</h2>
+    <br />
 
-<br />
-<a href="/logout" class="nav-link">logout</a>
+    <br />
+    <a href="/logout" class="nav-link">logout</a>
+    <div class="container">
+        <h1>We have received {{count}} signature(s) so far.</h1>
+        <div class="user-info four-col" id="user-info-headers">
+            <span>Name</span>
+            <span>Age</span>
+            <span>Location</span>
+            <span>Date Signed</span>
+        </div>
 
-<br />
-{{#emojis}}
-<h1>{{.}}</h1>
-{{/emojis}}
+        {{#each users}}
+        <div class="user-info four-col" "left">
+            {{#if webpage}}
+            <a href="{{webpage}}" target="_black">{{name}}</a>
+            {{else}}
+            <span>{{name}}</span>
+            {{/if}}
+            <span>{{age}}</span>
+            {{#if city}}
+            <a href="/city/{{city}}">{{city}}</a>
+            {{else}}
+            <span></span>
+            {{/if}}
+            <span>{{date}}</span>
+        </div>
+        {{/each}}
+    </div>
+</main>
