@@ -63,14 +63,6 @@ app.get("/about", (req, res) => {
 });
 
 // ############################################ //
-// ############# SIGNERS PAGE ################# //
-// ############################################ //
-
-app.get("/signers", (req, res) => {
-    res.render("signers", {});
-});
-
-// ############################################ //
 // ############## THANKS PAGE ################# //
 // ############################################ //
 
@@ -89,14 +81,6 @@ app.get("/thanks", (req, res) => {
         .catch((error) => {
             console.log("GET /thanks db.findSignature unsuccessful", error);
         });
-});
-
-// ############################################ //
-// ############## SIGNERS PAGE ################ //
-// ############################################ //
-
-app.get("/signers", (req, res) => {
-    res.render("signers", {});
 });
 
 // ############################################ //
@@ -141,7 +125,7 @@ app.post("/register", requireLoggedOutUser, (req, res) => {
 });
 
 // ################################################ //
-// ################# LOGOUT ROUT ################## //
+// ################# LOGOUT ROUTE ################# //
 // ################################################ //
 
 app.get("/logout", (req, res) => {
@@ -200,14 +184,14 @@ app.post("/petition", requireLoggedInUser, (req, res) => {
         // console.log("req.body test", req.body);
         db.insertSignature(req.session.userId, req.body.signing)
             .then((result) => {
-                // console.log("resultssss", result);
+                console.log("result: ", result);
                 // console.log("result.rows", result.rows);
                 // the following line is for setting a signature id
                 // req.session.sigId = result.rows[0].id;
                 // res.redirect("/thanks");
             })
             .catch((error) => {
-                console.log("errorsssss", error);
+                console.log("error: ", error);
             });
     } else {
         res.render("petition", {
@@ -217,6 +201,23 @@ app.post("/petition", requireLoggedInUser, (req, res) => {
     // if success, then set 'signed' cookie and direct to /thanks
     // if fail, then redirect to /petition again with errors: ["form not complete!"]
 });
+
+// ############################################ //
+// ############## SIGNERS PAGE ################ //
+// ############################################ //
+
+// app.get("/signers", requireLoggedInUser, (req, res) => {
+//     console.log("line 226 ran");
+//     db.getAllUsers()
+//         .then((result) => {
+//             console.log("result: ", result);
+//             res.render("signers", {});
+//         })
+//         .catch((error) => {
+//             console.log("error: ", error);
+//         });
+//     // res.render("signers", {});
+// });
 
 app.listen(process.env.PORT || 8080, () => console.log("petition is running"));
 

@@ -32,13 +32,13 @@ module.exports.insertSignature = (userId, signature) => {
 //     })
 //     .catch((e) => console.log(e));
 
-exports.getCitiesByCityName = (name) => {
-    return db.query(
-        `SELECT * FROM cities
-            WHERE city = $1`,
-        [name]
-    );
-};
+// exports.getCitiesByCityName = (name) => {
+//     return db.query(
+//         `SELECT * FROM cities
+//             WHERE city = $1`,
+//         [name]
+//     );
+// };
 
 // module.exports.findSignature = (signatureId) => {
 //     return db.query(
@@ -68,5 +68,8 @@ module.exports.findPassword = (inputEmail) => {
     return db.query(`SELECT * FROM users WHERE email = $1`, [inputEmail]);
 };
 
+module.exports.getAllUsers = () => {
+    return db.query(`SELECT * FROM users WHERE signature IS NOT NULL`, []);
+};
 // questions:
 // where in the code do you control which table of a given database you are accessing?
