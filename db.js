@@ -71,5 +71,10 @@ module.exports.findPassword = (inputEmail) => {
 module.exports.getAllUsers = () => {
     return db.query(`SELECT * FROM users WHERE signature IS NOT NULL`, []);
 };
+
+
+module.exports.getAllSignatures = () => {
+    return db.query(`SELECT first, last, signature FROM users WHERE signature IS NOT NULL`, []);
+};
 // questions:
 // where in the code do you control which table of a given database you are accessing?

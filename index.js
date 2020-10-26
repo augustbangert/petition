@@ -1,6 +1,5 @@
 const express = require("express");
 const app = express();
-// const cookieParser = require("cookie-parser"); // not needed according to Alistair on 17.06.2020
 const hb = require("express-handlebars");
 app.engine("handlebars", hb());
 app.set("view engine", "handlebars");
@@ -26,18 +25,14 @@ app.use(
 app.use(
     cookieSession({
         secret: `I'm always angry.`,
-        maxAge: 1000 * 60 * 60 * 24 * 14, // common practice to set a time limit for your cookie (fb cookies mostly never expire, in a bank perhaps a 5 minute age to the cookie, you get logged out after 5 min of inactivity. reset to 0 after every interaction) any number can go here
+        maxAge: 1000 * 60 * 60 * 24 * 14,
     })
 );
 
 app.use(express.static("./static"));
-app.use(express.static("./public")); // see if this works
+app.use(express.static("./public"));
 app.use(express.static(__dirname + "/projects"));
 app.use(express.static(__dirname + "/public"));
-
-// optional middleware
-// app.use(requireLoggedInUser);
-// app.use(requireLoggedOutUser);
 
 // ############################################ //
 // ############### SLASH ROUTE ################ //
@@ -46,12 +41,6 @@ app.use(express.static(__dirname + "/public"));
 app.get("/", (req, res) => {
     req.session.dill = "bigSecret99";
     res.redirect("/register");
-});
-
-// ############################################ //
-
-app.get("/pages/carousel/index.html", (req, res) => {
-    res.sendFile(`${__dirname}/pages/carousel/index.html`);
 });
 
 // ############################################ //
@@ -146,11 +135,8 @@ app.post("/login", requireLoggedOutUser, (req, res) => {
     let userId;
     db.findPassword(email)
         .then((result) => {
-            // if (result.rows.length == 0) {
-            //     res.json(false);
-            // }
             const hashedPassword = result.rows[0].password;
-            userId = result.rows[0].id; // possibly rename id
+            userId = result.rows[0].id;
             return compare(password, hashedPassword);
         })
         .then((isMatch) => {
@@ -165,6 +151,7 @@ app.post("/login", requireLoggedOutUser, (req, res) => {
         .catch((err) => {
             const error = "incorrect credentials, please re-enter";
             res.render("login", { error });
+            console.log(err);
         });
 });
 
@@ -188,7 +175,7 @@ app.post("/petition", requireLoggedInUser, (req, res) => {
                 // console.log("result.rows", result.rows);
                 // the following line is for setting a signature id
                 // req.session.sigId = result.rows[0].id;
-                // res.redirect("/thanks");
+                res.redirect("/signers");
             })
             .catch((error) => {
                 console.log("error: ", error);
@@ -198,26 +185,33 @@ app.post("/petition", requireLoggedInUser, (req, res) => {
             errors: ["error: please resubmit"],
         });
     }
-    // if success, then set 'signed' cookie and direct to /thanks
-    // if fail, then redirect to /petition again with errors: ["form not complete!"]
 });
 
 // ############################################ //
 // ############## SIGNERS PAGE ################ //
 // ############################################ //
 
-// app.get("/signers", requireLoggedInUser, (req, res) => {
-//     console.log("line 226 ran");
-//     db.getAllUsers()
-//         .then((result) => {
-//             console.log("result: ", result);
-//             res.render("signers", {});
-//         })
-//         .catch((error) => {
-//             console.log("error: ", error);
-//         });
-//     // res.render("signers", {});
-// });
+app.get("/signers", requireLoggedInUser, (req, res) => {
+    db.getAllSignatures()
+        .then((result) => {
+            let allSignatures = [];
+            for (let i = 0; i < result.rows.length; i++) {
+                allSignatures.push(result.rows[i]);
+            }
+            res.render("signers", {allSignatures});
+            // console.log("result: ", result);
+            // const { first, last, signature } = result.rows[0];
+            // res.render("signers", {
+            //     first: first,
+            //     last: last,
+            //     signature: signature,
+            // });
+        })
+        .catch((error) => {
+            console.log("error: ", error);
+        });
+    // res.render("signers", {});
+});
 
 app.listen(process.env.PORT || 8080, () => console.log("petition is running"));
 

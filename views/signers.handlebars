@@ -8,7 +8,7 @@
     <br />
     <a href="/logout" class="nav-link">logout</a>
     <div class="container">
-        <h1>We have received {{count}} signature(s) so far.</h1>
+        {{!-- <h1>We have received {{count}} signature(s) so far.</h1>
         <div class="user-info four-col" id="user-info-headers">
             <span>Name</span>
             <span>Age</span>
@@ -25,6 +25,15 @@
             {{/if}}
 
         </div>
-        {{/each}}
+        {{/each}} --}}
+        <ul>
+            {{#allSignatures}}
+                <li>
+                    {{first}}
+                    {{last}}
+                    {{signature}}
+                </li>
+            {{/allSignatures}}
+        </ul>
     </div>
 </main>
