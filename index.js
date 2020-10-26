@@ -192,13 +192,13 @@ app.post("/petition", requireLoggedInUser, (req, res) => {
 // ############################################ //
 
 app.get("/signers", requireLoggedInUser, (req, res) => {
-    db.getAllSignatures()
+    db.getAllSigners()
         .then((result) => {
-            let allSignatures = [];
+            let allSigners = [];
             for (let i = 0; i < result.rows.length; i++) {
-                allSignatures.push(result.rows[i]);
+                allSigners.push(result.rows[i]);
             }
-            res.render("signers", {allSignatures});
+            res.render("signers", {allSigners});
             // console.log("result: ", result);
             // const { first, last, signature } = result.rows[0];
             // res.render("signers", {

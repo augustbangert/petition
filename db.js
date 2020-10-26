@@ -73,8 +73,8 @@ module.exports.getAllUsers = () => {
 };
 
 
-module.exports.getAllSignatures = () => {
-    return db.query(`SELECT first, last, signature FROM users WHERE signature IS NOT NULL`, []);
+module.exports.getAllSigners = () => {
+    return db.query(`SELECT first, last FROM users WHERE signature IS NOT NULL`, []);
 };
 // questions:
 // where in the code do you control which table of a given database you are accessing?
